@@ -34,7 +34,20 @@
 .navLinks {
   display: flex;
   list-style: none;
-  gap: 15px;
+  gap: 1rem;
+  margin: 0;
+  padding: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.navLinks::-webkit-scrollbar {
+  display: none;
+}
+
+.navItem {
+  flex: 0 0 auto;
 }
 
 .link {
@@ -64,5 +77,11 @@
   .navbar {
     flex-direction: column;
     gap: 1.5rem;
+  }
+
+  navLinks {
+    overflow-x: visible;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
