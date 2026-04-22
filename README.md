@@ -190,35 +190,44 @@ npm run dev
 ## 📂 Project Structure
 
 ```bash
-src/
+elite-news/
 │
-├── components/
-│   ├── Navbar/
-│   │   ├── Navbar.jsx
-│   │   └── Navbar.module.css
+├── public/
+│   ├── favicon/               # Favicon assets
+│   └── nyt-preview.png        # Project preview image used in the README
+│
+├── src/
+│   ├── components/
+│   │   ├── Navbar/            # Navigation bar component
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Navbar.module.css
+│   │   │
+│   │   ├── ArticleCard/       # Reusable article card component
+│   │   │   ├── ArticleCard.jsx
+│   │   │   └── ArticleCard.module.css
+│   │   │
+│   │   └── ScrollToTop.jsx    # Scroll restoration on route change
 │   │
-│   └── ArticleCard/
-│       ├── ArticleCard.jsx
-│       └── ArticleCard.module.css
+│   ├── context/
+│   │   └── NewsContext.jsx    # Global state management
+│   │
+│   ├── data/
+│   │   └── api.js             # Axios requests to the NYT API
+│   │
+│   ├── pages/
+│   │   ├── Home.jsx           # Homepage with articles list
+│   │   └── ArticleDetail/
+│   │       ├── ArticleDetail.jsx
+│   │       └── ArticleDetail.module.css
+│   │
+│   ├── styles/
+│   │   ├── App.css            # Main layout styles
+│   │   └── index.css          # Global styles
+│   │
+│   ├── App.jsx                # Main app routing
+│   └── main.jsx               # React entry point
 │
-├── context/
-│   └── NewsContext.jsx
-│
-├── data/
-│   └── api.js
-│
-├── pages/
-│   ├── Home.jsx
-│   └── ArticleDetail/
-│       ├── ArticleDetail.jsx
-│       └── ArticleDetail.module.css
-│
-├── styles/
-│   ├── App.css
-│   └── index.css
-│
-├── App.jsx
-└── main.jsx
+└── README.md
 ```
 
 ---
