@@ -45,7 +45,7 @@ const ArticleDetail = () => {
             Page has been reloaded or the article is no longer in memory.
           </p>
           <button className={styles.backButton} onClick={() => navigate("/")}>
-            ← BACK TO HOME
+            ← BACK
           </button>
         </div>
       </div>
