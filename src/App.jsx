@@ -3,11 +3,13 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
 import ArticleDetail from "./pages/ArticleDetail/ArticleDetail";
 import "./styles/App.css";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     /* BrowserRouter enables navigation between different components without refreshing the page */
     <Router>
+      <ScrollToTop />
       <div className="App">
         {/* The Navbar remains static across all pages */}
         <Navbar />
