@@ -85,6 +85,7 @@ The New York Times Top Stories API provides access to featured articles from mul
   <img src="https://img.shields.io/badge/New_York_Times_API-F7B500?style=for-the-badge&logo=newyorktimes&logoColor=black" alt="New York Times API Badge" />
 </p>
 
+---
 
 ## 🛠️ Tech Stack
 
@@ -117,11 +118,6 @@ The New York Times Top Stories API provides access to featured articles from mul
 
 ---
 
-
-
-
----
-
 ## 🔌 API Used
 
 This project uses the **New York Times Top Stories API**, which returns article lists and related images for the selected section front.
@@ -131,8 +127,6 @@ This project uses the **New York Times Top Stories API**, which returns article 
 ```bash
 https://api.nytimes.com/svc/topstories/v2
 ```
-````
-````
 
 ### Example endpoints
 
