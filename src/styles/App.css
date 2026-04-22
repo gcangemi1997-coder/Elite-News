@@ -1,0 +1,29 @@
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.grid-layout article:first-child {
+  grid-column: span 2;
+}
+
+@media (min-width: 900px) {
+  .hero-article {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-layout article:first-child {
+    grid-column: span 1;
+  }
+}

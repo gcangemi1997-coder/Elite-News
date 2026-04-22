@@ -1,0 +1,68 @@
+.navbar {
+  width: 100%;
+  background-color: #f4f4f1;
+  padding: 1rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 3px solid #000;
+}
+
+.logo {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #000000;
+  border: #000 3px solid;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0px #000;
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+
+.logo:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000;
+  background-color: #ffde03;
+  color: #000;
+}
+
+.navLinks {
+  display: flex;
+  list-style: none;
+  gap: 15px;
+}
+
+.link {
+  background: #fff;
+  border: 2px solid #000;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px #000;
+  transition: all 0.1s ease;
+}
+
+.link:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000;
+  background-color: #ffde03;
+  color: #000;
+}
+
+.active {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
