@@ -57,6 +57,10 @@ The New York Times Top Stories API provides access to featured articles from mul
 - 🧭 Category navigation for multiple sections
 - 📄 Dedicated article detail page
 - ⚛️ Reusable React components
+  <<<<<<< HEAD
+  =======
+- ⬆️ Resets the scroll position to the top whenever the URL (the path) changes.
+  > > > > > > > 93a1db42d9a22076cbaec45b32e12aa5adef50f6
 - 🔄 Client-side routing with React Router
 - 🧠 Global state management with Context API
 - 🚀 Axios-based API requests
@@ -127,10 +131,6 @@ This project uses the **New York Times Top Stories API**, which returns article 
 https://api.nytimes.com/svc/topstories/v2
 ```
 
-```
-
-```
-
 ### Example endpoints
 
 ```bash
@@ -187,35 +187,44 @@ npm run dev
 ## 📂 Project Structure
 
 ```bash
-src/
+elite-news/
 │
-├── components/
-│   ├── Navbar/
-│   │   ├── Navbar.jsx
-│   │   └── Navbar.module.css
+├── public/
+│   ├── favicon/               # Favicon assets
+│   └── nyt-preview.png        # Project preview image used in the README
+│
+├── src/
+│   ├── components/
+│   │   ├── Navbar/            # Navigation bar component
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Navbar.module.css
+│   │   │
+│   │   ├── ArticleCard/       # Reusable article card component
+│   │   │   ├── ArticleCard.jsx
+│   │   │   └── ArticleCard.module.css
+│   │   │
+│   │   └── ScrollToTop.jsx    # Scroll restoration on route change
 │   │
-│   └── ArticleCard/
-│       ├── ArticleCard.jsx
-│       └── ArticleCard.module.css
+│   ├── context/
+│   │   └── NewsContext.jsx    # Global state management
+│   │
+│   ├── data/
+│   │   └── api.js             # Axios requests to the NYT API
+│   │
+│   ├── pages/
+│   │   ├── Home.jsx           # Homepage with articles list
+│   │   └── ArticleDetail/
+│   │       ├── ArticleDetail.jsx
+│   │       └── ArticleDetail.module.css
+│   │
+│   ├── styles/
+│   │   ├── App.css            # Main layout styles
+│   │   └── index.css          # Global styles
+│   │
+│   ├── App.jsx                # Main app routing
+│   └── main.jsx               # React entry point
 │
-├── context/
-│   └── NewsContext.jsx
-│
-├── data/
-│   └── api.js
-│
-├── pages/
-│   ├── Home.jsx
-│   └── ArticleDetail/
-│       ├── ArticleDetail.jsx
-│       └── ArticleDetail.module.css
-│
-├── styles/
-│   ├── App.css
-│   └── index.css
-│
-├── App.jsx
-└── main.jsx
+└── README.md
 ```
 
 ---
