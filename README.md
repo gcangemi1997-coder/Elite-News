@@ -29,7 +29,7 @@
 
 ## 📸 Screenshots
 
-<img src = 
+<img src ="public/nyt-preview.png" />
 
 ---
 
