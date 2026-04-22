@@ -57,6 +57,7 @@ The New York Times Top Stories API provides access to featured articles from mul
 - 🧭 Category navigation for multiple sections
 - 📄 Dedicated article detail page
 - ⚛️ Reusable React components
+- ⬆️ Resets the scroll position to the top whenever the URL (the path) changes.
 - 🔄 Client-side routing with React Router
 - 🧠 Global state management with Context API
 - 🚀 Axios-based API requests
