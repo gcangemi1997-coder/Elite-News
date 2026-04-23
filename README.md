@@ -8,7 +8,7 @@
   <a href="https://elite-news.vercel.app/">
     <img src="https://img.shields.io/badge/Live_Demo-FF4D4D?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo Badge" />
   </a>
-  <a href="https://github.com/gcangemi1997-coder/Elite-New">
+  <a href="https://github.com/gcangemi1997-coder/Elite-News/">
     <img src="https://img.shields.io/badge/Source_Code-111111?style=for-the-badge&logo=github&logoColor=white" alt="Source Code Badge" />
   </a>
   <a href="https://developer.nytimes.com/docs/top-stories-product/1/overview">
