@@ -27,8 +27,14 @@ const normalizeData = (doc, fallbackImg = null) => {
 
   return {
     title: doc.headline?.main || doc.title || "Untitled article",
-    abstract: doc.abstract || doc.snippet || "No abstract available.",
-    byline: doc.byline?.original || doc.byline || "Author not available",
+    abstract:
+      typeof doc.abstract === "string"
+        ? doc.abstract
+        : doc.abstract?.value || "No abstract available.",
+    byline:
+      doc.byline?.original ||
+      (typeof doc.byline === "string" ? doc.byline : null) ||
+      "Author not available",
     url: doc.web_url || doc.url,
     imageUrl: imgUrl || fallbackImg || "/nyt-placeholder.jpg",
   };
