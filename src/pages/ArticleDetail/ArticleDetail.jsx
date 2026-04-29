@@ -82,7 +82,7 @@ const ArticleDetail = () => {
               We couldn't retrieve the article. Please go back and try again.
             </p>
             <button className={styles.backButton} onClick={() => navigate("/")}>
-              ← BACK TO HOME
+              ← BACK
             </button>
           </div>
         </div>
