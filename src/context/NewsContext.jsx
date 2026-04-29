@@ -22,13 +22,16 @@ export const NewsProvider = ({ children }) => {
   useEffect(() => {
     const fetchArticles = async () => {
       setLoading(true);
+      setError(null);
+
       try {
-        setError(null);
         const data = await getNews(category);
         setNews(data);
-      } catch {
+      } catch (err) {
+        setNews([]);
         // UI Error Handling: informs the user if the fetch fails
         setError("Unable to load articles. Please try again later.");
+        console.error("Context Error:", err);
       } finally {
         // Stop the loading spinner regardless of success or failure
         setLoading(false);

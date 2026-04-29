@@ -21,13 +21,13 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <div
-        className={styles.logoContainer}
+      <button
+        type="button"
+        className={styles.logoButton}
         onClick={() => handleCategoryClick("home")}
-        style={{ cursor: "pointer" }}
       >
-        <h1 className={styles.logo}>Elite News</h1>
-      </div>
+        <span className={styles.logo}>Elite News</span>
+      </button>
 
       <ul className={styles.navLinks}>
         {categories.map((cat) => (

@@ -18,7 +18,8 @@
   display: inline-block;
 }
 
-.backButton:hover {
+.backButton:hover,
+.backButton:focus-visible {
   transform: translate(-2px, -2px);
   box-shadow: 7px 7px 0px black;
   background-color: #ffde03;
@@ -39,9 +40,9 @@
   font-size: clamp(1.8rem, 5vw, 3rem);
   font-weight: 900;
   line-height: 1.1;
-  margin-bottom: 0 0 15px 0;
+  margin-bottom: 15px;
   text-transform: uppercase;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .abstract {
@@ -63,8 +64,31 @@
   transition: all 0.2s ease;
 }
 
-.sourceLink:hover {
+.sourceLink:hover,
+.sourceLink:focus-visible {
   background-color: #ffde03;
   color: black;
   box-shadow: 5px 5px 0px black;
+}
+
+.errorContainer {
+  border: 3px solid black;
+  padding: 30px;
+  box-shadow: 10px 10px 0px black;
+  display: inline-block;
+  background-color: white;
+}
+
+.errorTitle {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.errorText {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.metaAuthor {
+  text-align: right;
 }

@@ -11,6 +11,16 @@
   border-bottom: 3px solid #000;
 }
 
+.logoButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
 .logo {
   font-family: "Space Grotesk", sans-serif;
   font-size: 1.8rem;
@@ -21,11 +31,12 @@
   text-transform: uppercase;
   box-shadow: 3px 3px 0px #000;
   transition: all 0.1s ease;
-  cursor: pointer;
   flex-shrink: 0;
+  margin: 0;
 }
 
-.logo:hover {
+.logoButton:hover .logo,
+.logoButton:focus-visible .logo {
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0px #000;
   background-color: #ffde03;
@@ -67,7 +78,8 @@
   white-space: nowrap;
 }
 
-.link:hover {
+.link:hover,
+.link:focus-visible {
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0px #000;
   background-color: #ffde03;

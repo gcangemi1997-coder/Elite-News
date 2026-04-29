@@ -7,7 +7,6 @@ import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
-    /* BrowserRouter enables navigation between different components without refreshing the page */
     <Router>
       <ScrollToTop />
       <div className="App">
@@ -17,8 +16,8 @@ function App() {
           <Routes>
             {/* Route for the main news feed */}
             <Route path="/" element={<Home />} />
-            {/* Route for the single article view using a dynamic parameter (:id) */}
-            <Route path="/article/:id" element={<ArticleDetail />} />
+            {/* Route for the single article view using a dynamic parameter (:title) */}
+            <Route path="/article/:title" element={<ArticleDetail />} />
           </Routes>
         </main>
       </div>

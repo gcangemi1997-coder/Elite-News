@@ -21,6 +21,6 @@ export const getNews = async (category) => {
   } catch (error) {
     // Basic error logging for debugging network or API issues
     console.error("Errore API:", error);
-    return [];
+    throw error;
   }
 };

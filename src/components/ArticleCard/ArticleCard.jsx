@@ -9,7 +9,11 @@ const ArticleCard = ({ article }) => {
   return (
     <article className={`${styles.card}`}>
       <div className={styles.imageContainer}>
-        <img src={imageUrl} alt={article.title} className={styles.image} />
+        <img
+          src={imageUrl || "https://via.placeholder.com/400x250?text=No+Image"}
+          alt={article.title}
+          className={styles.image}
+        />
       </div>
       <div className={styles.content}>
         <span className={styles.section}>{article.section}</span>
@@ -22,7 +26,7 @@ const ArticleCard = ({ article }) => {
         */}
         <Link
           to={`/article/${encodeURIComponent(article.title)}`}
-          state={{ article: article }}
+          state={{ article }}
           className={styles.link}
         >
           READ MORE
