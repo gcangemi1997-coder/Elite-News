@@ -4,25 +4,23 @@ import ArticleCard from "../components/ArticleCard/ArticleCard";
 import styles from "../components/ArticleCard/ArticleCard.module.css";
 
 const Home = () => {
-  // Extracting news data, error status, and loading state from the global NewsContext
   const { news, error, loading } = useNews();
+
   /**
-   * Data Sanitization:
-   * We filter the news array to ensure only articles with valid multimedia content
-   * are displayed, maintaining a consistent and high-quality visual layout.
+   * Data Sanitization Migliorata:
+   * Rimuoviamo il controllo su multimedia.length.
+   * Ora accettiamo tutti gli articoli che hanno almeno un URL e un titolo.
    */
   const filteredNews = news
     ? news.filter(
-        (article) =>
-          article.url && article.multimedia && article.multimedia.length > 0,
+        (article) => article.url && (article.title || article.headline?.main),
       )
     : [];
 
   return (
     <div className="grid-layout">
-      {loading /* UX Improvement: While data is fetching, we render a "Skeleton Screen" 
-             (6 placeholder cards) to reduce perceived waiting time. 
-          */ &&
+      {/* Skeleton Screen per il caricamento */}
+      {loading &&
         Array(6)
           .fill(0)
           .map((_, i) => (
@@ -35,20 +33,23 @@ const Home = () => {
               </div>
             </div>
           ))}
-      {/* Conditional Rendering: If data exists, map through the filtered array
-      to render ArticleCard components. Otherwise, display a fallback message if
-      no results are found. */}
+
+      {/* Messaggio di Errore */}
       {!loading && error && (
         <div className="error-message">
           <p>{error}</p>
         </div>
       )}
+
+      {/* Rendering degli articoli con Placeholder abilitato */}
       {!loading &&
         !error &&
         filteredNews.length > 0 &&
         filteredNews.map((article) => (
           <ArticleCard key={article.url} article={article} />
         ))}
+
+      {/* Fallback se la categoria è vuota */}
       {!loading && !error && filteredNews.length === 0 && (
         <p>Nessun articolo trovato in questa categoria.</p>
       )}

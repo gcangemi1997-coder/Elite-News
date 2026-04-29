@@ -10,6 +10,9 @@ const BASE_URL = "https://api.nytimes.com/svc/topstories/v2";
  * @returns {Array} - An array of article objects or an empty array if the request fails.
  */
 
+if (!API_KEY) {
+  throw new Error("VITE_NYT_API_KEY not found. Add to your .env file.");
+}
 export const getNews = async (category) => {
   try {
     const response = await axios.get(

@@ -1,137 +1,173 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from "./ArticleDetail.module.css";
 
+const normalizeData = (doc, fallbackImg = null) => {
+  if (!doc) return null;
+
+  const multimedia = Array.isArray(doc.multimedia) ? doc.multimedia : [];
+
+  const mainImage =
+    multimedia.find((m) => m.subtype === "xlarge") ||
+    multimedia.find((m) => m.crop_name === "articleLarge") ||
+    multimedia.find((m) => m.legacy?.xlarge) ||
+    multimedia[0];
+
+  let imgUrl = null;
+
+  if (mainImage) {
+    const rawPath = mainImage.url || mainImage.legacy?.xlarge;
+
+    if (rawPath) {
+      imgUrl = rawPath.startsWith("http")
+        ? rawPath
+        : `https://static01.nyt.com/${rawPath}`;
+    }
+  }
+
+  return {
+    title: doc.headline?.main || doc.title || "Untitled article",
+    abstract: doc.abstract || doc.snippet || "No abstract available.",
+    byline: doc.byline?.original || doc.byline || "Author not available",
+    url: doc.web_url || doc.url,
+    imageUrl: imgUrl || fallbackImg || "/nyt-placeholder.jpg",
+  };
+};
+
 const ArticleDetail = () => {
+  const { uri } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { title } = useParams();
 
-  // Let’s start with the navigation state (immediate UX)
-  const [article, setArticle] = useState(location.state?.article || null);
-  const [loading, setLoading] = useState(false);
+  const originalStateArticle = location.state?.article || null;
+  const originalStateImg = originalStateArticle?.multimedia?.[0]?.url || null;
+
+  const [article, setArticle] = useState(() =>
+    originalStateArticle ? normalizeData(originalStateArticle) : null,
+  );
+  const [loading, setLoading] = useState(!originalStateArticle);
   const [error, setError] = useState(null);
 
+  const handleBack = () => {
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate("/", { replace: true });
+    }
+  };
+
   useEffect(() => {
-    // Fetch the fallback only if the article is not present (e.g. on refresh)
-    if (!article && title) {
-      const fetchArticleByTitle = async () => {
-        setLoading(true);
-        setError(null);
+    if (!uri) return;
 
-        try {
-          const apiKey = import.meta.env.VITE_NYT_API_KEY;
-          const decodedTitle = decodeURIComponent(title);
+    if (originalStateArticle) {
+      setLoading(false);
+      return;
+    }
 
-          // Use Filter Query (fq) to perform a precise search on the headline
-          const response = await fetch(
-            `https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=headline:("${decodedTitle}")&api-key=${apiKey}`,
-          );
+    let ignore = false;
 
-          const data = await response.json();
+    const fetchArticle = async () => {
+      setLoading(true);
+      setError(null);
 
-          if (data.response && data.response.docs.length > 0) {
-            const doc = data.response.docs[0];
+      try {
+        const apiKey = import.meta.env.VITE_NYT_API_KEY;
+        if (!apiKey) {
+          throw new Error("Missing VITE_NYT_API_KEY");
+        }
 
-            // Robust data normalisation
-            setArticle({
-              title: doc.headline?.main || "Untitled article",
-              abstract: doc.abstract || "No abstract available.",
-              byline: doc.byline?.original || "Author not available",
-              url: doc.web_url,
-              multimedia: (doc.multimedia || []).map((m) => ({
-                url: m.url.startsWith("http")
-                  ? m.url
-                  : `https://static01.nyt.com/${m.url}`,
-              })),
-            });
-          } else {
-            setError("Article not found");
-          }
-        } catch (err) {
+        const decodedUri = decodeURIComponent(uri);
+
+        const params = new URLSearchParams({
+          fq: `uri:("${decodedUri}")`,
+          fl: "headline,abstract,snippet,byline,web_url,multimedia",
+          "api-key": apiKey,
+        });
+
+        const response = await fetch(
+          `https://api.nytimes.com/svc/search/v2/articlesearch.json?${params.toString()}`,
+        );
+
+        if (!response.ok) {
+          throw new Error("Unable to load article");
+        }
+
+        const data = await response.json();
+        const doc = data?.response?.docs?.[0];
+
+        if (!doc) {
+          throw new Error("Article not found");
+        }
+
+        if (!ignore) {
+          setArticle(normalizeData(doc, originalStateImg));
+        }
+      } catch (err) {
+        if (!ignore) {
           console.error("Fetch error:", err);
-          setError("Unable to load article data");
-        } finally {
+          setError(err.message || "Unable to retrieve article details.");
+        }
+      } finally {
+        if (!ignore) {
           setLoading(false);
         }
-      };
+      }
+    };
 
-      fetchArticleByTitle();
-    }
-  }, [article, title]); // Dependency defined solely by the URL parameter
+    fetchArticle();
 
-  // UI: Loading status
+    return () => {
+      ignore = true;
+    };
+  }, [uri, originalStateArticle, originalStateImg]);
+
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.errorContainer}>
-          <p className={styles.errorText}>Loading article data...</p>
-        </div>
+        <h2 className={styles.title}>Loading article...</h2>
       </div>
     );
   }
 
-  // UI: Explicit error status
-  if (error) {
+  if (error || !article) {
     return (
       <div className={styles.container}>
-        <div className={styles.errorContainer}>
-          <div className={styles.errorBox}>
-            <h2 className={styles.errorTitle}>{error}</h2>
-            <p className={styles.errorText}>
-              We couldn't retrieve the article. Please go back and try again.
-            </p>
-            <button className={styles.backButton} onClick={() => navigate("/")}>
-              ← BACK TO HOME
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // UI: Fallback if article is null (without an explicit error)
-  if (!article) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.errorContainer}>
-          <div className={styles.errorBox}>
-            <h2 className={styles.errorTitle}>Article not available</h2>
-            <p className={styles.errorText}>
-              The page was reloaded or the link is no longer valid.
-            </p>
-            <button className={styles.backButton} onClick={() => navigate("/")}>
-              ← BACK TO HOME
-            </button>
-          </div>
-        </div>
+        <h2 className={styles.title}>{error || "Article not available"}</h2>
+        <button
+          className={styles.backButton}
+          onClick={() => navigate("/", { replace: true })}
+        >
+          BACK TO HOME
+        </button>
       </div>
     );
   }
 
   return (
     <div className={styles.container}>
-      <button className={styles.backButton} onClick={() => navigate("/")}>
-        ← BACK TO HOME
+      <button className={styles.backButton} onClick={handleBack}>
+        ← BACK
       </button>
 
-      <div className={styles.imageWrapper}>
-        <img
-          src={
-            article.multimedia?.[0]?.url ||
-            "https://via.placeholder.com/800x400?text=No+Image"
-          }
-          alt={article.title}
-          className={styles.mainImage}
-        />
-      </div>
+      {article.imageUrl && (
+        <div className={styles.imageWrapper}>
+          <img
+            src={article.imageUrl}
+            alt={article.title}
+            className={styles.mainImage}
+            onError={(e) => {
+              e.currentTarget.src = "/nyt-placeholder.jpg";
+            }}
+          />
+        </div>
+      )}
 
       <h1 className={styles.title}>{article.title}</h1>
       <p className={styles.abstract}>{article.abstract}</p>
 
       <div className={styles.meta}>
-        <p className={styles.metaAuthor}>
-          <strong>Autore:</strong> {article.byline}
+        <p>
+          <strong>Author:</strong> {article.byline}
         </p>
         <a
           href={article.url}

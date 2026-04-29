@@ -3,16 +3,17 @@ import styles from "./ArticleCard.module.css";
 import { Link } from "react-router-dom";
 
 const ArticleCard = ({ article }) => {
-  // Extracting the first available image from the multimedia array
-  const imageUrl = article.multimedia?.[0]?.url;
+  // Uniformato a .jpg come in ArticleDetail
+  const imageUrl = article.multimedia?.[0]?.url || "/nyt-placeholder.jpg";
 
   return (
-    <article className={`${styles.card}`}>
+    <article className={styles.card}>
       <div className={styles.imageContainer}>
         <img
-          src={imageUrl || "https://via.placeholder.com/400x250?text=No+Image"}
+          src={imageUrl}
           alt={article.title}
           className={styles.image}
+          loading="lazy"
         />
       </div>
       <div className={styles.content}>
@@ -20,12 +21,8 @@ const ArticleCard = ({ article }) => {
         <h3 className={styles.title}>{article.title}</h3>
         <p className={styles.abstract}>{article.abstract}</p>
 
-        {/* Strategic Navigation:
-            We pass the entire 'article' object via the 'state' property.
-            This allows ArticleDetail to show data instantly without a new API call.
-        */}
         <Link
-          to={`/article/${encodeURIComponent(article.title)}`}
+          to={`/article/${encodeURIComponent(article.uri)}`}
           state={{ article }}
           className={styles.link}
         >

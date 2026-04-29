@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { getNews } from "../data/api";
 
-// Initialize a Context to share state across the entire application
 const NewsContext = createContext();
 
 export const NewsProvider = ({ children }) => {
@@ -9,40 +8,41 @@ export const NewsProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState("home");
+  const [cache, setCache] = useState({});
 
-  // Function to update the current category, triggered from the Navbar
   const changeCategory = (newCat) => {
     setCategory(newCat);
   };
 
-  /**
-   * Effect Hook: Triggers a new API call whenever the 'category' changes.
-   * This ensures the UI stays in sync with the user's selection.
-   */
   useEffect(() => {
     const fetchArticles = async () => {
+      // Usiamo la cache se disponibile per la categoria attuale
+      if (cache[category]) {
+        setNews(cache[category]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
 
       try {
         const data = await getNews(category);
         setNews(data);
+        // Aggiorniamo la cache: questo NON farà ripartire l'effetto perché 'cache' non è tra le dipendenze
+        setCache((prev) => ({ ...prev, [category]: data }));
       } catch (err) {
         setNews([]);
-        // UI Error Handling: informs the user if the fetch fails
         setError("Unable to load articles. Please try again later.");
         console.error("Context Error:", err);
       } finally {
-        // Stop the loading spinner regardless of success or failure
         setLoading(false);
       }
     };
 
     fetchArticles();
-  }, [category]);
+  }, [category]); // Corretto: solo category qui
 
   return (
-    /* Providing state and control functions to all child components */
     <NewsContext.Provider
       value={{ news, error, loading, category, changeCategory }}
     >
@@ -51,11 +51,6 @@ export const NewsProvider = ({ children }) => {
   );
 };
 
-/**
- * Custom Hook: useNews
- * Simplifies accessing the context and adds a safety check
- * to ensure it's used within a NewsProvider.
- */
 export const useNews = () => {
   const context = useContext(NewsContext);
   if (!context) {

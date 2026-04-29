@@ -10,14 +10,11 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <div className="App">
-        {/* The Navbar remains static across all pages */}
         <Navbar />
         <main className="main-container">
           <Routes>
-            {/* Route for the main news feed */}
             <Route path="/" element={<Home />} />
-            {/* Route for the single article view using a dynamic parameter (:title) */}
-            <Route path="/article/:title" element={<ArticleDetail />} />
+            <Route path="/article/:uri" element={<ArticleDetail />} />
           </Routes>
         </main>
       </div>
