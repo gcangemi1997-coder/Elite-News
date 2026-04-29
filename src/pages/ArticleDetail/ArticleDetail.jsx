@@ -2,10 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from "./ArticleDetail.module.css";
 
+/**
+ * Normalizes raw article data from both the Top Stories API and the
+ * Article Search API into a consistent shape for the UI.
+ * The fallbackImg is used when no multimedia is found in the fetched doc,
+ * but an image was already available from navigation state.
+ */
+
 const normalizeData = (doc, fallbackImg = null) => {
   if (!doc) return null;
 
   const multimedia = Array.isArray(doc.multimedia) ? doc.multimedia : [];
+
+  // Prefer the largest available image format, falling back progressively
 
   const mainImage =
     multimedia.find((m) => m.subtype === "xlarge") ||
@@ -18,6 +27,8 @@ const normalizeData = (doc, fallbackImg = null) => {
   if (mainImage) {
     const rawPath = mainImage.url || mainImage.legacy?.xlarge;
 
+    // The Top Stories API returns relative paths; Article Search returns full URLs
+
     if (rawPath) {
       imgUrl = rawPath.startsWith("http")
         ? rawPath
@@ -27,10 +38,14 @@ const normalizeData = (doc, fallbackImg = null) => {
 
   return {
     title: doc.headline?.main || doc.title || "Untitled article",
+    // abstract can be an object in "interactive" article types — guard against it
+
     abstract:
       typeof doc.abstract === "string"
         ? doc.abstract
         : doc.abstract?.value || "No abstract available.",
+    // byline can also be an object; extract the human-readable string safely
+
     byline:
       doc.byline?.original ||
       (typeof doc.byline === "string" ? doc.byline : null) ||
@@ -45,14 +60,22 @@ const ArticleDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Capture navigation state once — used as the fast-path data source
+
   const originalStateArticle = location.state?.article || null;
   const originalStateImg = originalStateArticle?.multimedia?.[0]?.url || null;
+
+  // If the user navigated here via a Link, normalize the state article immediately
+  // to avoid a redundant fetch. If the page was refreshed or opened directly,
+  // article starts as null and the useEffect fetch kicks in.
 
   const [article, setArticle] = useState(() =>
     originalStateArticle ? normalizeData(originalStateArticle) : null,
   );
   const [loading, setLoading] = useState(!originalStateArticle);
   const [error, setError] = useState(null);
+
+  // Navigate back if possible, otherwise fall back to home to avoid a dead end
 
   const handleBack = () => {
     if (window.history.state && window.history.state.idx > 0) {
@@ -65,10 +88,14 @@ const ArticleDetail = () => {
   useEffect(() => {
     if (!uri) return;
 
+    // Fast path: article already available from navigation state — skip fetch
+
     if (originalStateArticle) {
       setLoading(false);
       return;
     }
+    // Cleanup flag: prevents setting state on an unmounted component
+    // (e.g. user navigates away before the fetch completes)
 
     let ignore = false;
 
@@ -84,6 +111,8 @@ const ArticleDetail = () => {
 
         const decodedUri = decodeURIComponent(uri);
 
+        // Use fq (filter query) with the article URI for a precise, stable lookup.
+        // fl limits the response fields to only what the UI needs.
         const params = new URLSearchParams({
           fq: `uri:("${decodedUri}")`,
           fl: "headline,abstract,snippet,byline,web_url,multimedia",
@@ -106,6 +135,8 @@ const ArticleDetail = () => {
         }
 
         if (!ignore) {
+          // Pass originalStateImg as fallback so the image from navigation
+          // state is reused if the search API returns no multimedia
           setArticle(normalizeData(doc, originalStateImg));
         }
       } catch (err) {
@@ -121,6 +152,8 @@ const ArticleDetail = () => {
     };
 
     fetchArticle();
+
+    // Cleanup: mark this effect as stale if the component unmounts mid-fetch
 
     return () => {
       ignore = true;
@@ -161,6 +194,7 @@ const ArticleDetail = () => {
             src={article.imageUrl}
             alt={article.title}
             className={styles.mainImage}
+            // If the resolved URL is broken, fall back to the local placeholder
             onError={(e) => {
               e.currentTarget.src = "/nyt-placeholder.jpg";
             }}

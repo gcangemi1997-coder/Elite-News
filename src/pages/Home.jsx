@@ -7,9 +7,9 @@ const Home = () => {
   const { news, error, loading } = useNews();
 
   /**
-   * Data Sanitization Migliorata:
-   * Rimuoviamo il controllo su multimedia.length.
-   * Ora accettiamo tutti gli articoli che hanno almeno un URL e un titolo.
+   * Improved data sanitisation:
+   * Removed check on multimedia.length.
+   * Accept all articles that have at least one URL and one title.
    */
   const filteredNews = news
     ? news.filter(
@@ -19,7 +19,7 @@ const Home = () => {
 
   return (
     <div className="grid-layout">
-      {/* Skeleton Screen per il caricamento */}
+      {/* Loading screen */}
       {loading &&
         Array(6)
           .fill(0)
@@ -34,14 +34,14 @@ const Home = () => {
             </div>
           ))}
 
-      {/* Messaggio di Errore */}
+      {/* Error Message */}
       {!loading && error && (
         <div className="error-message">
           <p>{error}</p>
         </div>
       )}
 
-      {/* Rendering degli articoli con Placeholder abilitato */}
+      {/* Rendering of articles with placeholders enabled */}
       {!loading &&
         !error &&
         filteredNews.length > 0 &&
@@ -49,9 +49,9 @@ const Home = () => {
           <ArticleCard key={article.url} article={article} />
         ))}
 
-      {/* Fallback se la categoria è vuota */}
+      {/* Fallback if the category is empty */}
       {!loading && !error && filteredNews.length === 0 && (
-        <p>Nessun articolo trovato in questa categoria.</p>
+        <p>No articles found in this category.</p>
       )}
     </div>
   );

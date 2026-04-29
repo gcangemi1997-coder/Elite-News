@@ -16,7 +16,7 @@ export const NewsProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchArticles = async () => {
-      // Usiamo la cache se disponibile per la categoria attuale
+      // Use the cache if available for the current category
       if (cache[category]) {
         setNews(cache[category]);
         return;
@@ -28,7 +28,7 @@ export const NewsProvider = ({ children }) => {
       try {
         const data = await getNews(category);
         setNews(data);
-        // Aggiorniamo la cache: questo NON farà ripartire l'effetto perché 'cache' non è tra le dipendenze
+        // Let's refresh the cache: this will NOT trigger the effect again because “cache” is not listed among the dependencies
         setCache((prev) => ({ ...prev, [category]: data }));
       } catch (err) {
         setNews([]);
@@ -40,7 +40,7 @@ export const NewsProvider = ({ children }) => {
     };
 
     fetchArticles();
-  }, [category]); // Corretto: solo category qui
+  }, [category]);
 
   return (
     <NewsContext.Provider
