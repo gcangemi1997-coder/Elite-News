@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
 import ArticleDetail from "./pages/ArticleDetail/ArticleDetail";
@@ -7,7 +7,7 @@ import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <ScrollToTop />
       <div className="App">
         {/* The Navbar remains static across all pages */}
@@ -21,7 +21,7 @@ function App() {
           </Routes>
         </main>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 
