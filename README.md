@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-  <a href="https://nyt-clone-react.vercel.app/">
+  <a href="https://elite-news.vercel.app/">
     <img src="https://img.shields.io/badge/Live_Demo-FF4D4D?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo Badge" />
   </a>
-  <a href="https://github.com/gcangemi1997-coder/nyt-clone-react">
+  <a href="https://github.com/gcangemi1997-coder/Elite-News/">
     <img src="https://img.shields.io/badge/Source_Code-111111?style=for-the-badge&logo=github&logoColor=white" alt="Source Code Badge" />
   </a>
   <a href="https://developer.nytimes.com/docs/top-stories-product/1/overview">
@@ -88,6 +88,8 @@ The New York Times Top Stories API provides access to featured articles from mul
   <img src="https://img.shields.io/badge/New_York_Times_API-F7B500?style=for-the-badge&logo=newyorktimes&logoColor=black" alt="New York Times API Badge" />
 </p>
 
+---
+
 ## 🛠️ Tech Stack
 
 ### Languages
@@ -116,8 +118,6 @@ The New York Times Top Stories API provides access to featured articles from mul
 - Conditional Rendering
 - Dynamic Routing
 - Shared Global State
-
----
 
 ---
 
